@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Drafted</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= favicon_link_tag asset_path('favicon.ico') %>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body class="">
+  <div class="flex h-screen overflow-hidden">
+    <%= render 'partials/sidebar' if current_user %>
+    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      <%= render 'partials/header' if current_user %>
+      <main class="">
+        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+          <%= yield %>
+        </div>
+      </main>
+    </div>
+    <%= render 'partials/alerts' %>
+  </div>
+  <%= javascript_include_tag 'tailadmin.js', defer: true %>
+</body>
+
+</html>

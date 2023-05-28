@@ -1,0 +1,83 @@
+<div class="flex flex-col gap-y-4 rounded-sm border border-stroke bg-white p-3 shadow-default dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between">
+  <div class="flex items-center gap-6">
+    <h3 class="text-title-lg font-bold text-black dark:text-white">
+      <%= @account.full_name %>
+    </h3>
+    <%= link_to destroy_account_path, data: { "turbo-method": :delete, "turbo-confirm": 'Are you sure?' }, class: "flex h-9 w-9 items-center justify-center rounded-full border border-stroke bg-white text-primary dark:border-strokedark dark:bg-boxdarkdo" do %>
+    <svg class="fill-danger" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+    </svg>
+    <% end %>
+    <%= link_to @account.external_amazon_url, target: :_blank, class: "flex h-9 w-9 items-center justify-center rounded-full border border-stroke bg-white text-primary dark:border-strokedark dark:bg-boxdarkdo" do %>
+    <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+      <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+    </svg>
+    <% end %>
+  </div>
+  <div class="flex flex-col gap-4 2xsm:flex-row 2xsm:items-center">
+    <%= link_to new_report_import_path, class:"flex items-center gap-2 rounded bg-primary py-2 px-4.5 font-medium text-white hover:bg-opacity-80" do %>
+    <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 7H9V1C9 0.4 8.6 0 8 0C7.4 0 7 0.4 7 1V7H1C0.4 7 0 7.4 0 8C0 8.6 0.4 9 1 9H7V15C7 15.6 7.4 16 8 16C8.6 16 9 15.6 9 15V9H15C15.6 9 16 8.6 16 8C16 7.4 15.6 7 15 7Z" fill=""></path>
+    </svg>
+    New upload
+    <% end %>
+  </div>
+</div>
+<!-- ===== Report Import Start ===== -->
+<div class="mt-7.5 grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
+  <div class="col-span-12">
+    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div class="p-4 md:p-6 xl:p-7.5">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-title-sm2 font-bold text-black dark:text-white">
+              Report Imports
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="border-b border-stroke px-4 pb-5 dark:border-strokedark md:px-6 xl:px-7.5">
+        <div class="flex items-center gap-3">
+          <div class="w-2/12 xl:w-3/12">
+            <span class="font-medium">Dated</span>
+          </div>
+          <div class="w-6/12 2xsm:w-5/12 md:w-3/12">
+            <span class="font-medium">Uploaded by</span>
+          </div>
+          <div class="hidden w-4/12 md:block xl:w-3/12">
+            <span class="font-medium">Uploaded at</span>
+          </div>
+          <div class="w-4/12 2xsm:w-3/12 md:w-2/12 xl:w-1/12">
+            <span class="font-medium">Status</span>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 md:p-6 xl:p-7.5">
+        <div class="flex flex-col">
+          <% @account.report_imports.each do |report_import| %>
+          <div class="flex items-center gap-3 py-5 hover:bg-gray-2 dark:hover:bg-meta-4">
+            <div class="w-2/12 xl:w-3/12">
+              <span class="font-medium">
+                <%= report_import.taken_date.to_date %></span>
+            </div>
+            <div class="w-6/12 2xsm:w-5/12 md:w-3/12">
+              <span class="font-medium">
+                <%= report_import.operator.name %></span>
+            </div>
+            <div class="hidden w-4/12 md:block xl:w-3/12">
+              <span class="font-medium">
+                <%= report_import.created_at.to_date  %></span>
+            </div>
+            <div class="w-4/12 2xsm:w-3/12 md:w-2/12 xl:w-1/12">
+              <span class="inline-block rounded bg-red/[0.08] py-0.5 px-2.5 text-sm font-medium text-warning">
+                <%= report_import.status %></span>
+            </div>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <!-- ===== Report Import End ===== -->
+  </div>
