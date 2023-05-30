@@ -1,4 +1,4 @@
-<% if flash  %>
+<% if flash.any?  %>
 <div x-data="{popupOpen: true}">
   <div x-show="popupOpen" x-transition="" class="fixed z-100 right-5 bottom-3 w-1/2 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
     <button @click="popupOpen = false" class="absolute right-1 top-1 sm:right-5 sm:top-5">
