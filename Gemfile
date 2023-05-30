@@ -74,6 +74,10 @@ group :test do
   gem "webdrivers"
 end
 
+group :production do
+  gem "aws-sdk-s3", require: false
+end
+
 ###
 ### mine
 ###
