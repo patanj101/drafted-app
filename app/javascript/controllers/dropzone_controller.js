@@ -4,41 +4,15 @@ import { DirectUpload } from "@rails/activestorage";
 import Dropzone from "dropzone";
 
 // import {
-//   this.getMetaValue,
-//   this.findElement,
-//   this.removeElement,
-//   this.insertAfter,
+//   getMetaValue,
+//   findElement,
+//   removeElement,
+//   insertAfter,
 // } from "../helpers/dropzone";
 
 // Connects to data-controller="dropzone"
 export default class extends Controller {
   static targets = ["input"];
-
-  getMetaValue(name) {
-    const element = this.findElement(document.head, `meta[name="${name}"]`);
-    if (element) {
-      return element.getAttribute("content");
-    }
-  }
-
-  findElement(root, selector) {
-    if (typeof root == "string") {
-      selector = root;
-      root = document;
-    }
-    return root.querySelector(selector);
-  }
-
-  removeElement(el) {
-    if (el && el.parentNode) {
-      el.parentNode.removeChild(el);
-    }
-  }
-
-  insertAfter(el, referenceNode) {
-    return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
-  }
-
 
   connect() {
     console.log("Connected to the dropzone controller");
@@ -61,7 +35,7 @@ export default class extends Controller {
     });
 
     this.dropZone.on("removedfile", (file) => {
-      file.controller && this.removeElement(file.controller.hiddenInput);
+      file.controller && removeElement(file.controller.hiddenInput);
     });
     this.dropZone.on("canceled", (file) => {
       file.controller && file.controller.xhr.abort();
@@ -75,7 +49,7 @@ export default class extends Controller {
   }
 
   get headers() {
-    return { "X-CSRF-Token": this.getMetaValue("csrf-token") };
+    return { "X-CSRF-Token": getMetaValue("csrf-token") };
   }
   get url() {
     return this.inputTarget.getAttribute("data-direct-upload-url");
@@ -100,7 +74,7 @@ export default class extends Controller {
     return this.element.closest("form");
   }
   get submitButton() {
-    return this.findElement(this.form, "input[type=submit], button[type=submit]");
+    return findElement(this.form, "input[type=submit], button[type=submit]");
   }
 }
 class DirectUploadController {
@@ -114,7 +88,7 @@ class DirectUploadController {
     this.hiddenInput = this.createHiddenInput();
     this.directUpload.create((error, attributes) => {
       if (error) {
-        this.removeElement(this.hiddenInput);
+        removeElement(this.hiddenInput);
         this.emitDropzoneError(error);
       } else {
         this.hiddenInput.value = attributes.signed_id;
@@ -126,7 +100,7 @@ class DirectUploadController {
     const input = document.createElement("input");
     input.type = "hidden";
     input.name = this.source.inputTarget.name;
-    this.insertAfter(input, this.source.inputTarget);
+    insertAfter(input, this.source.inputTarget);
     return input;
   }
   directUploadWillStoreFileWithXHR(xhr) {
@@ -142,7 +116,7 @@ class DirectUploadController {
   uploadRequestDidProgress(event) {
     const element = this.source.element;
     const progress = (event.loaded / event.total) * 100;
-    this.findElement(
+    findElement(
       this.file.previewTemplate,
       ".dz-upload"
     ).style.width = `${progress}%`;
@@ -186,4 +160,29 @@ function createDropZone(controller) {
   });
   console.log(dropzone);
   return dropzone;
+}
+
+function getMetaValue(name) {
+  const element = findElement(document.head, `meta[name="${name}"]`);
+  if (element) {
+    return element.getAttribute("content");
+  }
+}
+
+function findElement(root, selector) {
+  if (typeof root == "string") {
+    selector = root;
+    root = document;
+  }
+  return root.querySelector(selector);
+}
+
+function removeElement(el) {
+  if (el && el.parentNode) {
+    el.parentNode.removeChild(el);
+  }
+}
+
+function insertAfter(el, referenceNode) {
+  return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
 }
